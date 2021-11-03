@@ -1,0 +1,23 @@
+version: 2.1
+
+executors:
+  foo:
+    docker:
+      - image: cimg/base:2021.04
+    resource_class: medium+
+
+jobs:
+  test:
+    executor: foo
+    steps:
+      - run: echo "Hello, world!"
+
+workflows:
+  version: 2.1
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      
