@@ -17,6 +17,7 @@ jobs:
     resource_class: domparfitt/test
     steps:
       - checkout
+      - run: cat foo.txt
       - run: echo "Hi I'm on Runners!"
 
 workflows:
