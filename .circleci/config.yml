@@ -12,6 +12,13 @@ jobs:
     steps:
       - run: echo "Hello, world!"
 
+  runner-test:
+    machine: true
+    resource_class: domparfitt/test
+    steps:
+      - checkout
+      - run: echo "Hi I'm on Runners!"
+
 workflows:
   version: 2.1
   test:
@@ -20,4 +27,11 @@ workflows:
           filters:
             branches:
               only: master
+
+  runner-test:
+    jobs:
+      - runner-test:
+          filters:
+            branches:
+              only: runner
       
