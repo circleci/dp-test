@@ -6,9 +6,13 @@ executors:
       - image: cimg/base:2021.04
     resource_class: medium+
 
+  ubuntu:
+    machine:
+      image: ubuntu-2004:202010-01
+
 jobs:
   test:
-    executor: foo
+    executor: ubuntu
     steps:
       - run: echo "Hello, world!"
 
@@ -19,5 +23,5 @@ workflows:
       - test:
           filters:
             branches:
-              only: master
+              only: machine
       
