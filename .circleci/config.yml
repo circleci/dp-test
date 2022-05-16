@@ -16,9 +16,9 @@ jobs:
       - checkout
       - run:
           name: 'Say hello'
-          environment:
-            BAR: $FOO
-          command: 'echo Hello, $BAR!'
+          command: |
+            BAR=$FOO
+            'echo Hello, $BAR!'
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
