@@ -14,12 +14,14 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - run:
-          name: Set env vars
-          command: echo 'export BAR=$FOO' >> $BASH_ENV
+      # - run:
+      #     name: Set env vars
+      #     command: echo 'export BAR=$FOO' >> $BASH_ENV
       - run:
           name: 'Say hello'
-          command: echo Hello, $BAR!
+          command: |
+            export BAR=$FOO
+            echo Hello, $BAR!
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
