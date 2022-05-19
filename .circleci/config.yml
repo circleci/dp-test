@@ -5,6 +5,9 @@ executors:
     docker:
       - image: cimg/base:2021.04
     resource_class: medium+
+  runner:
+    machine: true
+    resource_class: domparfitt/test
 
 jobs:
   test:
@@ -13,12 +16,24 @@ jobs:
       - run: echo "Hello, world!"
 
   runner-test:
-    machine: true
-    resource_class: domparfitt/test
+    executor: runner
+    # machine: true
+    # resource_class: domparfitt/test
     steps:
       - checkout
       - run: cat foo.txt
-      - run: echo "Hi I'm on Runners!"
+      - run: echo "Hi I'm on Runner!"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - 'foo.txt'
+
+  runner-test-2:
+    executor: runner
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: cat /tmp/workspace/foo.txt
 
 workflows:
   version: 2.1
@@ -35,4 +50,9 @@ workflows:
           filters:
             branches:
               only: runner
-      
+      - runner-test-2:
+          requires:
+            - runner-test
+          filters:
+            branches:
+              only: runner
