@@ -35,6 +35,24 @@ jobs:
           at: /tmp/workspace
       - run: cat /tmp/workspace/foo.txt
 
+  cache-save:
+    executor: foo
+    parallelism: 4
+    steps:
+      - run: echo "Hello, world" > foo.txt
+      - save_cache:
+          paths:
+            - 'foo.txt'
+          key: foo
+
+  cache-restore:
+    executor: foo
+    parallelism: 4
+    steps:
+      - restore_cache:
+          key: foo
+      - run: cat foo.txt
+
 workflows:
   version: 2.1
   test:
@@ -56,3 +74,16 @@ workflows:
           filters:
             branches:
               only: runner
+
+  cache-test:
+    jobs:
+      - cache-save:
+          filters:
+            branches:
+              only: cache-test
+      - cache-restore:
+          requires:
+            - cache-save
+          filters:
+            branches:
+              only: cache-test
