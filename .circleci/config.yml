@@ -33,7 +33,7 @@ jobs:
     steps:
       - attach_workspace:
           at: $FOO
-      - run: cat /tmp/workspace/foo.txt
+      - run: cat $FOO/foo.txt
 
   cache-save:
     executor: foo
