@@ -16,7 +16,7 @@ jobs:
       - run: echo "Hello, world!"
 
   runner-test:
-    executor: runner
+    executor: foo
     # machine: true
     # resource_class: domparfitt/test
     steps:
@@ -29,10 +29,10 @@ jobs:
             - 'foo.txt'
 
   runner-test-2:
-    executor: runner
+    executor: foo
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: $FOO
       - run: cat /tmp/workspace/foo.txt
 
   cache-save:
