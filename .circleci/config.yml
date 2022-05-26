@@ -67,13 +67,13 @@ workflows:
       - runner-test:
           filters:
             branches:
-              only: runner
+              only: cache-test
       - runner-test-2:
           requires:
             - runner-test
           filters:
             branches:
-              only: runner
+              only: cache-test
 
   cache-test:
     jobs:
