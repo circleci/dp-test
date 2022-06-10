@@ -35,6 +35,14 @@ jobs:
           at: /tmp/workspace
       - run: cat /tmp/workspace/foo.txt
 
+  large-artifact:
+    executor: runner
+    steps:
+      - run: mkfile -n 1G large_file
+      - run: ls -ahl
+      - store_artifacts:
+          path: large_file
+
 workflows:
   version: 2.1
   test:
@@ -46,13 +54,17 @@ workflows:
 
   runner-test:
     jobs:
-      - runner-test:
+      - large-artifact:
           filters:
             branches:
               only: runner
-      - runner-test-2:
-          requires:
-            - runner-test
-          filters:
-            branches:
-              only: runner
+      # - runner-test:
+      #     filters:
+      #       branches:
+      #         only: runner
+      # - runner-test-2:
+      #     requires:
+      #       - runner-test
+      #     filters:
+      #       branches:
+      #         only: runner
