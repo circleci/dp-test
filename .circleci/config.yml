@@ -37,9 +37,8 @@ jobs:
 
   cache-save:
     executor: foo
-    parallelism: 4
     steps:
-      - run: echo "Hello, world" > foo.txt
+      - run: echo "Hello, world!" > foo.txt
       - save_cache:
           paths:
             - 'foo.txt'
