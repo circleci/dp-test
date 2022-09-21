@@ -1,33 +1,11 @@
 version: 2.1
 
 executors:
-  foo:
-    docker:
-      - image: cimg/base:2021.04
-    resource_class: medium+
   runner:
     machine: true
     resource_class: domparfitt/test
 
 jobs:
-  test:
-    executor: foo
-    steps:
-      - run: echo "Hello, world!"
-
-  runner-test:
-    executor: runner
-    # machine: true
-    # resource_class: domparfitt/test
-    steps:
-      - checkout
-      - run: cat foo.txt
-      - run: echo "Hi I'm on Runner!"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - 'foo.txt'
-
   runner-test-2:
     executor: runner
     steps:
@@ -35,36 +13,23 @@ jobs:
           at: /tmp/workspace
       - run: cat /tmp/workspace/foo.txt
 
-  large-artifact:
+  large-cache:
     executor: runner
     steps:
       - run: mkfile -n 1G large_file
-      - run: ls -ahl
-      - store_artifacts:
-          path: large_file
+      - save_cache:
+          key: foo.txt
+          paths:
+            - large_file
+      - restore_cache:
+          key: foo.txt
 
 workflows:
   version: 2.1
-  test:
-    jobs:
-      - test:
-          filters:
-            branches:
-              only: master
 
   runner-test:
     jobs:
-      - large-artifact:
+      - large-cache:
           filters:
             branches:
               only: runner
-      # - runner-test:
-      #     filters:
-      #       branches:
-      #         only: runner
-      # - runner-test-2:
-      #     requires:
-      #       - runner-test
-      #     filters:
-      #       branches:
-      #         only: runner
